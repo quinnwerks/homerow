@@ -3,6 +3,9 @@
 #include <unordered_map>
 
 #include "frontend_enums.h"
+
+#ifndef SCANNER_H
+#define SCANNER_H
 class Scanner {
     public:
         using TOKEN_PAIR = std::pair<LANG::TOKEN, 
@@ -20,3 +23,4 @@ class Scanner {
         unsigned int m_col;
         std::unordered_map<std::string, LANG::TOKEN> m_table;
 };
+#endif

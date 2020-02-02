@@ -3,7 +3,6 @@
 
 #include <vector>
 
-
 class ScannerTest : public ::testing::Test {
     protected:
         Scanner m_scanner;
