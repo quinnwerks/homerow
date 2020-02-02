@@ -1,5 +1,5 @@
 namespace LANG {
-    enum TEXT {
+    enum TOKEN {
         UP,
         DOWN,
         LEFT,
@@ -9,6 +9,8 @@ namespace LANG {
         IF,
         WHILE,
         EXPR_BEGIN,
-        EXPR_END
+        EXPR_END,
+        UNKNOWN,
+        END_FILE
     };
 }

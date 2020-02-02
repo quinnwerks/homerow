@@ -14,15 +14,26 @@ class ScannerTest : public ::testing::Test {
 };
 
 TEST_F(ScannerTest, getNextWord) {
-    std::vector<std::string> cases = {"", 
-                                      "ssss", 
-                                      " aaaaa bbbbbb ", 
-                                      " skl   "};
+    using TEST_CASE = std::tuple<std::string, 
+                                 std::pair
+                                          <LANG::TOKEN, 
+                                           std::string>>; 
+    std::vector<TEST_CASE> cases = {{"",                  {LANG::TOKEN::END_FILE, "" }}, 
+                                    {"k don't read this", {LANG::TOKEN::UP,       "k"}},
+                                    {"jgarbage",          {LANG::TOKEN::DOWN,     "j"}}, 
+                                    {"       a",          {LANG::TOKEN::IN,       "a"}},
+                                    {"\n\n\n\n\n \ns",    {LANG::TOKEN::OUT,      "s"}}};
 
     for (auto& test : cases) {
         std::stringstream input_stream;
-        input_stream << test;
-        std::string word(m_scanner.getNextWord(input_stream));
-        std::cout << word << std::endl;
+
+        std::string input_contents;
+        std::pair<LANG::TOKEN, std::string> golden_result;
+        std::tie(input_contents, golden_result) = test;
+
+        input_stream << input_contents;
+        std::pair<LANG::TOKEN, std::string> result(m_scanner.getNextWord(input_stream));
+        ASSERT_EQ(result.first,  golden_result.first);
+        ASSERT_EQ(result.second, golden_result.second);
     }  
 }
