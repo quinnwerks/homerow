@@ -1,16 +1,13 @@
+#include "common.h"
+
 #include <iostream>
 #include <sstream>  
 #include <unordered_map>
-
-#include "frontend_enums.h"
 
 #ifndef SCANNER_H
 #define SCANNER_H
 class Scanner {
     public:
-        using TOKEN_PAIR = std::pair<LANG::TOKEN, 
-                                     std::string>;
-
         Scanner();
         Scanner(Scanner& copy_this);
         Scanner& operator=(const Scanner& copy_this);

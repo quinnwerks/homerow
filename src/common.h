@@ -1,3 +1,7 @@
+#include <string>
+
+#ifndef COMMON_H
+#define COMMON_H
 namespace LANG {
     enum TOKEN {
         UP,
@@ -14,3 +18,7 @@ namespace LANG {
         END_FILE
     };
 }
+
+using TOKEN_PAIR = std::pair<LANG::TOKEN, 
+                             std::string>;
+#endif

@@ -1,5 +1,4 @@
 #include "scanner.h"
-#include <assert.h>
 
 Scanner::Scanner() {
     m_line = 0;
@@ -34,8 +33,7 @@ void Scanner::setup_table() {
     m_table[""]  = LANG::TOKEN::END_FILE;
 }
 
-std::pair<LANG::TOKEN, 
-          std::string> Scanner::getNextWord(std::istream& input) {
+TOKEN_PAIR Scanner::getNextWord(std::istream& input) {
     std::string lexeme;
     char c;
     // Clear any whitespace
