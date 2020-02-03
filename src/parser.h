@@ -7,5 +7,8 @@ class Parser {
         Parser();
         Parser(Parser& copy_this);
         Parser& operator=(Parser & copy_this);
+
+        bool processWord(TOKEN_PAIR word);
+        std::string dumpRepresentation();    
 };
 #endif

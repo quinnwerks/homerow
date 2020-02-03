@@ -14,3 +14,11 @@ Parser& Parser::operator=(Parser& copy_this) {
     }
     return *this;    
 }
+
+bool Parser::processWord(TOKEN_PAIR word) {
+    return false;
+}
+
+std::string Parser::dumpRepresentation() {
+    return "";
+}
