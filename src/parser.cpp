@@ -12,6 +12,7 @@ Parser& Parser::operator=(Parser& copy_this) {
 }
 
 PARSER_RET_CODE Parser::parse(Scanner& scanner) {
+    return PARSER_RET_CODE::FAIL;
 }
 
 /// @brief Entry point for parser
@@ -23,22 +24,23 @@ PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& prev_tok
     switch(token) {
         // PERFROM OP ON CURRENT CELL
         case TOKEN::UP: 
-        case TOKEN::DOWN:  ret_code = parse_cell_mute(token_pair);
-                           break;
+        case TOKEN::DOWN:     ret_code = parse_cell_mute(token_pair);
+                              break;
 
         // CHANGE CELL
         case TOKEN::LEFT:
-        case TOKEN::RIGHT: ret_code = parse_cell_move(token_pair);
-                           break;
+        case TOKEN::RIGHT:    ret_code = parse_cell_move(token_pair);
+                              break;
         
         // OUTPUT CELL
         case TOKEN::IN:    
-        case TOKEN::OUT:   ret_code = parse_cell_ioop(token_pair);
-                           break;
+        case TOKEN::OUT:      ret_code = parse_cell_ioop(token_pair);
+                              break;
         
         // FLOW CONTROL
-        case TOKEN::WHILE: ret_code = parse_flow_while(scanner, token_pair);
-                           break;
+        case TOKEN::WHILE:    ret_code = parse_flow_while(scanner, 
+                                                          token_pair);
+                              break;
 
         case TOKEN::EXPR_END: ret_code = PARSER_RET_CODE::CHECK_EXPR_END;
                               break;
@@ -46,7 +48,9 @@ PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& prev_tok
         // EOF
         case TOKEN::END_PROG: ret_code = PARSER_RET_CODE::CHECK_EOF;
                               break;
-        default: break; 
+        
+        default:              ret_code = PARSER_RET_CODE::FAIL_UNEXPECTED_SYMBOL; 
+                              break; 
     }
 
     return ret_code;

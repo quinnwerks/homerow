@@ -63,9 +63,13 @@ TEST(PARSER_SHOULD, parse_while_unexpected_symbol) {
 }
 
 TEST(PARSER_SHOULD, parse_while_embedded_whiles_correct_passes) {
-    run_test_case({"F: F: hhh ;;", PARSER_RET_CODE::CONTINUE_WHILE});
+    run_test_case({"F: F: hhh ; jjj ;", PARSER_RET_CODE::CONTINUE_WHILE});
 }
 
-TEST(PARSER_SHOULD, parse_while_embedded_whiles_incorrect_fails) {
+TEST(PARSER_SHOULD, parse_while_embedded_whiles_incorrect_fails_outer) {
     run_test_case({"F: F: hhh ;", PARSER_RET_CODE::FAIL_EARLY_EOF});
+}
+
+TEST(PARSER_SHOULD, parse_while_embedded_whiles_incorrect_fails_inner) {
+    run_test_case({"F: F: hhh y ; hh;", PARSER_RET_CODE::FAIL_UNEXPECTED_SYMBOL});
 }
