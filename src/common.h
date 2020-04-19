@@ -29,4 +29,13 @@ using TOKEN = LANG::TOKEN;
 
 using TOKEN_PAIR = std::pair<LANG::TOKEN, 
                              std::string>;
+
+
+enum class NODE_TYPE {
+    PROG_START,
+    BODY,
+    OPER_MOVE,
+    OPER_MUTE
+};
+
 #endif
