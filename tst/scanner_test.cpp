@@ -14,6 +14,7 @@ TEST(SCANNER_SHOULD, getNextWord) {
                                     {"k don't read this", {LANG::TOKEN::UP,       "k"}},
                                     {"jgarbage",          {LANG::TOKEN::DOWN,     "j"}}, 
                                     {"       a",          {LANG::TOKEN::IN,       "a"}},
+                                    {"h",                 {LANG::TOKEN::LEFT,     "h"}},
                                     {"\n\n\n\n\n \ns",    {LANG::TOKEN::OUT,      "s"}}};
 
     std::stringstream dummy_stream;

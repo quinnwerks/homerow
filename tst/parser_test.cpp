@@ -4,51 +4,68 @@
 #include <vector>
 #include <tuple>
 
-TOKEN_PAIR test_pair(TOKEN token) {
-    return std::make_pair(token, "");
-}
-
-
-using TEST_CASE = std::tuple<TOKEN_PAIR, PARSER_RET_CODE>;
+using TEST_CASE = std::tuple<std::string, PARSER_RET_CODE>;
 void run_test_case(TEST_CASE test_case) {
-    TOKEN_PAIR input_token;
+    std::string input_string;
     PARSER_RET_CODE golden_code = PARSER_RET_CODE::FAIL;
-    std::tie(input_token, golden_code) = test_case;
+    std::tie(input_string, golden_code) = test_case;
 
     std::stringstream test_stream;
+    test_stream << input_string;
     Scanner scanner(test_stream);
 
+    TOKEN_PAIR dummy_pair = std::make_pair(TOKEN::UNKNOWN, "");
     Parser test_parser;
 
-    auto result_code =  test_parser.parse_token(scanner, input_token);
+    auto result_code =  test_parser.parse_token(scanner, dummy_pair);
     ASSERT_EQ(golden_code, result_code);
 }
 
 
 TEST(PARSER_SHOULD, parse_mute_up) {
-    run_test_case({test_pair(TOKEN::UP), PARSER_RET_CODE::CONTINUE_MUTE});
+    run_test_case({"k", PARSER_RET_CODE::CONTINUE_MUTE});
 }
 
 TEST(PARSER_SHOULD, parse_mute_down) {
-    run_test_case({test_pair(TOKEN::DOWN), PARSER_RET_CODE::CONTINUE_MUTE});
+    run_test_case({"j", PARSER_RET_CODE::CONTINUE_MUTE});
 }
 
 TEST(PARSER_SHOULD, parse_move_left) {
-    run_test_case({test_pair(TOKEN::LEFT), PARSER_RET_CODE::CONTINUE_MOVE});
+    run_test_case({"h", PARSER_RET_CODE::CONTINUE_MOVE});
 }
 
 TEST(PARSER_SHOULD, parse_move_right) {
-    run_test_case({test_pair(TOKEN::RIGHT), PARSER_RET_CODE::CONTINUE_MOVE});
+    run_test_case({"l", PARSER_RET_CODE::CONTINUE_MOVE});
 }
 
 TEST(PARSER_SHOULD, parse_ioop_in) {
-    run_test_case({test_pair(TOKEN::IN), PARSER_RET_CODE::CONTINUE_IOOP});
+    run_test_case({"a", PARSER_RET_CODE::CONTINUE_IOOP});
 }
 
 TEST(PARSER_SHOULD, parse_ioop_out) {
-    run_test_case({test_pair(TOKEN::OUT), PARSER_RET_CODE::CONTINUE_IOOP});
+    run_test_case({"s", PARSER_RET_CODE::CONTINUE_IOOP});
 }
 
-TEST(PARSER_SHOULD, parse_while_out) {
-    run_test_case({test_pair(TOKEN::WHILE), PARSER_RET_CODE::CONTINUE_WHILE});
+TEST(PARSER_SHOULD, parse_while_okay) {
+    run_test_case({"F :hhh;", PARSER_RET_CODE::CONTINUE_WHILE});
+}
+
+TEST(PARSER_SHOULD, parse_while_early_eof) {
+    run_test_case({"F :hhh", PARSER_RET_CODE::FAIL_EARLY_EOF});
+}
+
+TEST(PARSER_SHOULD, parse_while_no_expr_begin) {
+    run_test_case({"Fhhh", PARSER_RET_CODE::FAIL_NO_EXPR_BEGIN});
+}
+
+TEST(PARSER_SHOULD, parse_while_unexpected_symbol) {
+    run_test_case({"Fhhhy", PARSER_RET_CODE::FAIL_NO_EXPR_BEGIN});
+}
+
+TEST(PARSER_SHOULD, parse_while_embedded_whiles_correct_passes) {
+    run_test_case({"F: F: hhh ;;", PARSER_RET_CODE::CONTINUE_WHILE});
+}
+
+TEST(PARSER_SHOULD, parse_while_embedded_whiles_incorrect_fails) {
+    run_test_case({"F: F: hhh ;", PARSER_RET_CODE::FAIL_EARLY_EOF});
 }

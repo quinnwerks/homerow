@@ -37,8 +37,8 @@ void Scanner::setup_table() {
     m_table["s"] = LANG::TOKEN::OUT;
     m_table["G"] = LANG::TOKEN::IF;
     m_table["F"] = LANG::TOKEN::WHILE;
-    m_table["H"] = LANG::TOKEN::EXPR_BEGIN;
-    m_table["h"] = LANG::TOKEN::EXPR_END;
+    m_table[":"] = LANG::TOKEN::EXPR_BEGIN;
+    m_table[";"] = LANG::TOKEN::EXPR_END;
     m_table[""]  = LANG::TOKEN::END_PROG;
 }
 

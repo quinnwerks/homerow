@@ -11,11 +11,15 @@ Parser& Parser::operator=(Parser& copy_this) {
     return *this;    
 }
 
+PARSER_RET_CODE Parser::parse(Scanner& scanner) {
+}
 
 /// @brief Entry point for parser
-PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& token_pair) {
-    auto ret_code = PARSER_RET_CODE::FAIL;
+PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& prev_token_pair) { 
+    auto token_pair = scanner.getNextWord();
     auto token = token_pair.first;
+    
+    auto ret_code = PARSER_RET_CODE::FAIL;
     switch(token) {
         // PERFROM OP ON CURRENT CELL
         case TOKEN::UP: 
@@ -36,8 +40,12 @@ PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& token_pa
         case TOKEN::WHILE: ret_code = parse_flow_while(scanner, token_pair);
                            break;
 
+        case TOKEN::EXPR_END: ret_code = PARSER_RET_CODE::CHECK_EXPR_END;
+                              break;
+
         // EOF
-        case TOKEN::END_PROG: break;
+        case TOKEN::END_PROG: ret_code = PARSER_RET_CODE::CHECK_EOF;
+                              break;
         default: break; 
     }
 
@@ -65,5 +73,22 @@ PARSER_RET_CODE Parser::parse_cell_ioop(const TOKEN_PAIR& token_pair) {
 }
 
 PARSER_RET_CODE Parser::parse_flow_while(Scanner& scanner, const TOKEN_PAIR& token_pair) {
+    auto ret_code = PARSER_RET_CODE::FAIL;
+    auto expr_token = scanner.getNextWord().first;
+    if(expr_token != TOKEN::EXPR_BEGIN) {
+        return PARSER_RET_CODE::FAIL_NO_EXPR_BEGIN;
+    }
+
+    while(ret_code != PARSER_RET_CODE::CHECK_EXPR_END) {
+        ret_code = parse_token(scanner, token_pair);
+        ret_code = ret_code == PARSER_RET_CODE::CHECK_EOF ?
+                   PARSER_RET_CODE::FAIL_EARLY_EOF : ret_code;
+
+        if(ret_code >= PARSER_RET_CODE::FAIL_UNEXPECTED_SYMBOL 
+        && ret_code <= PARSER_RET_CODE::FAIL) {
+            return ret_code;
+        }
+    }
+
     return PARSER_RET_CODE::CONTINUE_WHILE;
 }
