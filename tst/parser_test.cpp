@@ -5,20 +5,30 @@
 #include <tuple>
 
 using TEST_CASE_EXPR = std::tuple<std::string, PARSER_RET_CODE>;
-void run_test_case_expr(TEST_CASE_EXPR test_case) {
+template<typename FUNC>
+void run_test_case(TEST_CASE_EXPR test_case, FUNC f) {
     std::string input_string;
     PARSER_RET_CODE golden_code = PARSER_RET_CODE::FAIL;
     std::tie(input_string, golden_code) = test_case;
 
     std::stringstream test_stream;
     test_stream << input_string;
-    Scanner scanner(test_stream);
+    Scanner test_scanner(test_stream);
 
     Parser test_parser;
-    auto result_code =  test_parser.parse_token(scanner);
+    auto result_code =  test_parser.f(test_scanner);
     ASSERT_EQ(golden_code, result_code);
 }
 
+/// @brief Run a test on a single expression
+void run_test_case_expr(TEST_CASE_EXPR test_case){
+    run_test_case<PARSER_RET_CODE(Parser::*)(Scanner&)>(test_case, &Parser::parse_token);
+}
+
+/// @brief Run a test on a whole program.
+void run_test_case_full(TEST_CASE_EXPR test_case){
+    run_test_case<PARSER_RET_CODE(Parser::*)(Scanner&)>(test_case, &Parser::parse);
+}
 
 TEST(PARSER_SHOULD, parse_mute_up) {
     run_test_case_expr({"k", PARSER_RET_CODE::CONTINUE_MUTE});
