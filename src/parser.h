@@ -7,6 +7,7 @@ enum class PARSER_RET_CODE {
     CONTINUE_MUTE,
     CONTINUE_MOVE,
     CONTINUE_IOOP,
+    CONTINUE_WHILE,
     ACCEPT,
     FAIL
 };
@@ -19,12 +20,14 @@ class Parser {
         Parser& operator=(Parser & copy_this);
 
         PARSER_RET_CODE parse(Scanner& scanner);
-        PARSER_RET_CODE parse_token(const TOKEN_PAIR& token_pair);
+        PARSER_RET_CODE parse_token(Scanner& scanner, const TOKEN_PAIR& token_pair);
     
     private:
         PARSER_RET_CODE parse_cell_mute(const TOKEN_PAIR& token_pair);
         PARSER_RET_CODE parse_cell_move(const TOKEN_PAIR& token_pair);
         PARSER_RET_CODE parse_cell_ioop(const TOKEN_PAIR& token_pair);
+
+        PARSER_RET_CODE parse_flow_while(Scanner& scanner, const TOKEN_PAIR& token_pair);
         PARSER_RET_CODE validExpr(TOKEN_PAIR word);
         std::string dumpRepresentation();   
 };

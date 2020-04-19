@@ -13,7 +13,7 @@ Parser& Parser::operator=(Parser& copy_this) {
 
 
 /// @brief Entry point for parser
-PARSER_RET_CODE Parser::parse_token(const TOKEN_PAIR& token_pair) {
+PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& token_pair) {
     auto ret_code = PARSER_RET_CODE::FAIL;
     auto token = token_pair.first;
     switch(token) {
@@ -33,8 +33,9 @@ PARSER_RET_CODE Parser::parse_token(const TOKEN_PAIR& token_pair) {
                            break;
         
         // FLOW CONTROL
-        case TOKEN::IF: 
-        case TOKEN::WHILE: break;
+        case TOKEN::WHILE: ret_code = parse_flow_while(scanner, token_pair);
+                           break;
+
         // EOF
         case TOKEN::END_PROG: break;
         default: break; 
@@ -61,4 +62,8 @@ PARSER_RET_CODE Parser::parse_cell_move(const TOKEN_PAIR& token_pair) {
 PARSER_RET_CODE Parser::parse_cell_ioop(const TOKEN_PAIR& token_pair) {
 
     return PARSER_RET_CODE::CONTINUE_IOOP;
+}
+
+PARSER_RET_CODE Parser::parse_flow_while(Scanner& scanner, const TOKEN_PAIR& token_pair) {
+    return PARSER_RET_CODE::CONTINUE_WHILE;
 }

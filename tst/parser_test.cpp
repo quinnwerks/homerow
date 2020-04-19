@@ -16,7 +16,8 @@ void run_test_case(TEST_CASE test_case) {
     std::tie(input_token, golden_code) = test_case;
     
     Parser test_parser;
-    auto result_code =  test_parser.parse_token(input_token);
+    Scanner scanner;
+    auto result_code =  test_parser.parse_token(scanner, input_token);
     ASSERT_EQ(golden_code, result_code);
 }
 
@@ -43,4 +44,8 @@ TEST(PARSER_SHOULD, parse_ioop_in) {
 
 TEST(PARSER_SHOULD, parse_ioop_out) {
     run_test_case({test_pair(TOKEN::OUT), PARSER_RET_CODE::CONTINUE_IOOP});
+}
+
+TEST(PARSER_SHOULD, parse_while_out) {
+    run_test_case({test_pair(TOKEN::WHILE), PARSER_RET_CODE::CONTINUE_WHILE});
 }
