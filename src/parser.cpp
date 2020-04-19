@@ -19,7 +19,7 @@ PARSER_RET_CODE Parser::parse_token(const TOKEN_PAIR& token_pair) {
     switch(token) {
         // PERFROM OP ON CURRENT CELL
         case TOKEN::UP: 
-        case TOKEN::DOWN:  ret_code = parse_cell_oper(token_pair);
+        case TOKEN::DOWN:  ret_code = parse_cell_mute(token_pair);
                            break;
 
         // CHANGE CELL
@@ -28,32 +28,36 @@ PARSER_RET_CODE Parser::parse_token(const TOKEN_PAIR& token_pair) {
                            break;
         
         // OUTPUT CELL
-        case TOKEN::IN: 
+        case TOKEN::IN:    ret_code = parse_cell_ioop(token_pair);
         case TOKEN::OUT: break;
         
         // FLOW CONTROL
         case TOKEN::IF: 
-        case TOKEN::WHILE: 
-
-        // OTHER...
-        case TOKEN::EXPR_BEGIN: break;
-        case TOKEN::EXPR_END: break;
-
+        case TOKEN::WHILE: break;
         // EOF
-        case TOKEN::END_FILE: break;
+        case TOKEN::END_PROG: break;
         default: break; 
     }
-    
+
     return ret_code;
 }
 
 /// @brief Create an increment or decrement node
-PARSER_RET_CODE Parser::parse_cell_oper(const TOKEN_PAIR& token_pair) {
-    return PARSER_RET_CODE::CONTINUE_OPER;
+PARSER_RET_CODE Parser::parse_cell_mute(const TOKEN_PAIR& token_pair) {
+    auto token = token_pair.first;
+    int value = token == TOKEN::UP ? 1 : -1;
+    return PARSER_RET_CODE::CONTINUE_MUTE;
 }
 
 /// @brief Move up a cell or down a cell. If the cell does not exist
 ///        create one.
 PARSER_RET_CODE Parser::parse_cell_move(const TOKEN_PAIR& token_pair) {
+    auto token = token_pair.first;
+    int value = token == TOKEN::RIGHT ? 1 : -1;
     return PARSER_RET_CODE::CONTINUE_MOVE;
+}
+
+PARSER_RET_CODE Parser::parse_cell_ioop(const TOKEN_PAIR& token_pair) {
+
+    return PARSER_RET_CODE::CONTINUE_IOOP;
 }

@@ -30,7 +30,7 @@ void Scanner::setup_table() {
     m_table["F"] = LANG::TOKEN::WHILE;
     m_table["H"] = LANG::TOKEN::EXPR_BEGIN;
     m_table["h"] = LANG::TOKEN::EXPR_END;
-    m_table[""]  = LANG::TOKEN::END_FILE;
+    m_table[""]  = LANG::TOKEN::END_PROG;
 }
 
 TOKEN_PAIR Scanner::getNextWord(std::istream& input) {
@@ -46,7 +46,7 @@ TOKEN_PAIR Scanner::getNextWord(std::istream& input) {
             m_col++;
         }
     }
-    if (input.eof()) return std::make_pair(LANG::TOKEN::END_FILE, lexeme);
+    if (input.eof()) return std::make_pair(LANG::TOKEN::END_PROG, lexeme);
     // Get next accepting state
     lexeme += c;
     m_col++;

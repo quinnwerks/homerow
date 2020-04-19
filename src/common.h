@@ -14,8 +14,8 @@ namespace LANG {
         WHILE,
         EXPR_BEGIN,
         EXPR_END,
-        UNKNOWN,
-        END_FILE
+        END_PROG,
+        UNKNOWN
     };
 }
 using TOKEN = LANG::TOKEN;
