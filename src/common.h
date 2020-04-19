@@ -18,6 +18,14 @@ namespace LANG {
         END_FILE
     };
 }
+using TOKEN = LANG::TOKEN;
+
+/*
+ * EXPR ::= OP
+ * OP ::= UP | DOWN | LEFT | RIGHT | IN | OUT | CNTRL
+ * CNTRL = (IF | WHILE) EXPR_BEGIN OPS EXPR_END
+ * 
+ */
 
 using TOKEN_PAIR = std::pair<LANG::TOKEN, 
                              std::string>;
