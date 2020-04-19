@@ -14,9 +14,12 @@ void run_test_case(TEST_CASE test_case) {
     TOKEN_PAIR input_token;
     PARSER_RET_CODE golden_code = PARSER_RET_CODE::FAIL;
     std::tie(input_token, golden_code) = test_case;
-    
+
+    std::stringstream test_stream;
+    Scanner scanner(test_stream);
+
     Parser test_parser;
-    Scanner scanner;
+
     auto result_code =  test_parser.parse_token(scanner, input_token);
     ASSERT_EQ(golden_code, result_code);
 }
