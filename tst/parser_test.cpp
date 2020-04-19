@@ -2,11 +2,37 @@
 #include "parser.h"
 
 #include <vector>
+#include <tuple>
 
-class ParserTest : public ::testing::Test {
-    protected:
-        Parser m_parser;
-        void SetUp() override {
-        }
-        void TearDown() override {}
-};
+TOKEN_PAIR test_pair(TOKEN token) {
+    return std::make_pair(token, "");
+}
+
+
+using TEST_CASE = std::tuple<TOKEN_PAIR, PARSER_RET_CODE>;
+void run_test_case(TEST_CASE test_case) {
+    TOKEN_PAIR input_token;
+    PARSER_RET_CODE golden_code = PARSER_RET_CODE::FAIL;
+    std::tie(input_token, golden_code) = test_case;
+    
+    Parser test_parser;
+    auto result_code =  test_parser.parse_token(input_token);
+    ASSERT_EQ(golden_code, result_code);
+}
+
+
+TEST(PARSER_SHOULD, parse_mute_up) {
+    run_test_case({test_pair(TOKEN::UP), PARSER_RET_CODE::CONTINUE_MUTE});
+}
+
+TEST(PARSER_SHOULD, parse_mute_down) {
+    run_test_case({test_pair(TOKEN::DOWN), PARSER_RET_CODE::CONTINUE_MUTE});
+}
+
+TEST(PARSER_SHOULD, parse_move_left) {
+    run_test_case({test_pair(TOKEN::LEFT), PARSER_RET_CODE::CONTINUE_MOVE});
+}
+
+TEST(PARSER_SHOULD, parse_move_right) {
+    run_test_case({test_pair(TOKEN::RIGHT), PARSER_RET_CODE::CONTINUE_MOVE});
+}

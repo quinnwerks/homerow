@@ -17,7 +17,7 @@ TEST_F(ScannerTest, getNextWord) {
                                  std::pair
                                           <LANG::TOKEN, 
                                            std::string>>; 
-    std::vector<TEST_CASE> cases = {{"",                  {LANG::TOKEN::END_FILE, "" }}, 
+    std::vector<TEST_CASE> cases = {{"",                  {LANG::TOKEN::END_PROG, "" }}, 
                                     {"k don't read this", {LANG::TOKEN::UP,       "k"}},
                                     {"jgarbage",          {LANG::TOKEN::DOWN,     "j"}}, 
                                     {"       a",          {LANG::TOKEN::IN,       "a"}},

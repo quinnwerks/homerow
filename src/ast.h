@@ -1,3 +1,5 @@
+#ifndef AST_H
+#define AST_H
 #include "common.h"
 
 enum class NODE_TYPE {
@@ -8,7 +10,9 @@ enum class NODE_TYPE {
 
 class AstNode {
     public:
-        AstNode(const NODE_TYPE type);
+        AstNode(const NODE_TYPE type, const int cell) 
+        : m_type(type), m_cell(cell) {}
+        
         AstNode(const AstNode& copy_this);
 
         int getCell();
@@ -20,8 +24,12 @@ class AstNode {
 
 class OperNode : AstNode {
     public:
-        OperNode(int value);
+        OperNode(const NODE_TYPE type, const int cell, const int value) 
+        : m_value(value), AstNode(type, cell) {}
 
         int getValue();
-
+    protected:
+        int m_value;
 };
+
+#endif
