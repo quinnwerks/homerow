@@ -36,3 +36,11 @@ TEST(PARSER_SHOULD, parse_move_left) {
 TEST(PARSER_SHOULD, parse_move_right) {
     run_test_case({test_pair(TOKEN::RIGHT), PARSER_RET_CODE::CONTINUE_MOVE});
 }
+
+TEST(PARSER_SHOULD, parse_ioop_in) {
+    run_test_case({test_pair(TOKEN::IN), PARSER_RET_CODE::CONTINUE_IOOP});
+}
+
+TEST(PARSER_SHOULD, parse_ioop_out) {
+    run_test_case({test_pair(TOKEN::OUT), PARSER_RET_CODE::CONTINUE_IOOP});
+}

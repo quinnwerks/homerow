@@ -28,8 +28,9 @@ PARSER_RET_CODE Parser::parse_token(const TOKEN_PAIR& token_pair) {
                            break;
         
         // OUTPUT CELL
-        case TOKEN::IN:    ret_code = parse_cell_ioop(token_pair);
-        case TOKEN::OUT: break;
+        case TOKEN::IN:    
+        case TOKEN::OUT:   ret_code = parse_cell_ioop(token_pair);
+                           break;
         
         // FLOW CONTROL
         case TOKEN::IF: 
