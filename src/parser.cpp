@@ -12,11 +12,19 @@ Parser& Parser::operator=(Parser& copy_this) {
 }
 
 PARSER_RET_CODE Parser::parse(Scanner& scanner) {
-    return PARSER_RET_CODE::FAIL;
+    auto ret_code = PARSER_RET_CODE::FAIL;
+    while(ret_code != PARSER_RET_CODE::CHECK_EOF) {
+        ret_code = parse_token(scanner);
+        if(ret_code >= PARSER_RET_CODE::FAIL_UNEXPECTED_SYMBOL 
+        && ret_code <= PARSER_RET_CODE::FAIL) {
+            return PARSER_RET_CODE::FAIL;
+        }
+    }
+    return PARSER_RET_CODE::ACCEPT;
 }
 
 /// @brief Entry point for parser
-PARSER_RET_CODE Parser::parse_token(Scanner& scanner, const TOKEN_PAIR& prev_token_pair) { 
+PARSER_RET_CODE Parser::parse_token(Scanner& scanner) { 
     auto token_pair = scanner.getNextWord();
     auto token = token_pair.first;
     
@@ -84,7 +92,7 @@ PARSER_RET_CODE Parser::parse_flow_while(Scanner& scanner, const TOKEN_PAIR& tok
     }
 
     while(ret_code != PARSER_RET_CODE::CHECK_EXPR_END) {
-        ret_code = parse_token(scanner, token_pair);
+        ret_code = parse_token(scanner);
         ret_code = ret_code == PARSER_RET_CODE::CHECK_EOF ?
                    PARSER_RET_CODE::FAIL_EARLY_EOF : ret_code;
 
