@@ -6,6 +6,7 @@
 #include <cassert>
 #include <stack>
 #include <iostream>
+#include <tuple>
 
 namespace LANG {
     enum TOKEN {

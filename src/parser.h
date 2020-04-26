@@ -1,5 +1,6 @@
 #include "common.h"
 #include "scanner.h"
+#include "ast.h"
 
 #ifndef PARSER_H
 #define PARSER_H
@@ -26,6 +27,8 @@ class Parser {
 
         PARSER_RET_CODE parse(Scanner& scanner);
         PARSER_RET_CODE parse_token(Scanner& scanner);
+
+        Ast& ast() {return m_ast;}
        
     private:
         PARSER_RET_CODE parse_cell_mute(const TOKEN_PAIR& token_pair);
@@ -34,6 +37,8 @@ class Parser {
 
         PARSER_RET_CODE parse_flow_while(Scanner& scanner, const TOKEN_PAIR& prev_token_pair);
         PARSER_RET_CODE validExpr(TOKEN_PAIR word);
-        std::string dumpRepresentation();   
+        std::string dumpRepresentation();
+
+        Ast m_ast;   
 };
 #endif

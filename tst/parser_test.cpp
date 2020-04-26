@@ -30,6 +30,7 @@ void run_test_case(TEST_CASE_EXPR test_case, FUNC f) {
     Parser test_parser;
     auto result_code =  f(test_parser, test_scanner);
     ASSERT_EQ(golden_code, result_code);
+    std::cout << test_parser.ast().get_debug_tree();
 }
 
 /// @brief Run a test on a single expression

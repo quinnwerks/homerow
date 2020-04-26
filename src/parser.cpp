@@ -60,7 +60,6 @@ PARSER_RET_CODE Parser::parse_token(Scanner& scanner) {
         default:              ret_code = PARSER_RET_CODE::FAIL_UNEXPECTED_SYMBOL; 
                               break; 
     }
-
     return ret_code;
 }
 
@@ -68,6 +67,9 @@ PARSER_RET_CODE Parser::parse_token(Scanner& scanner) {
 PARSER_RET_CODE Parser::parse_cell_mute(const TOKEN_PAIR& token_pair) {
     auto token = token_pair.first;
     int value = token == TOKEN::UP ? 1 : -1;
+    auto new_node = new BinaryNode(NODE_TYPE::OPER_MUTE, 0, 0);
+    assert(new_node);
+    m_ast.insert(*new_node);
     return PARSER_RET_CODE::CONTINUE_MUTE;
 }
 
@@ -76,11 +78,16 @@ PARSER_RET_CODE Parser::parse_cell_mute(const TOKEN_PAIR& token_pair) {
 PARSER_RET_CODE Parser::parse_cell_move(const TOKEN_PAIR& token_pair) {
     auto token = token_pair.first;
     int value = token == TOKEN::RIGHT ? 1 : -1;
+    auto new_node = new BinaryNode(NODE_TYPE::OPER_MOVE, 0, 0);
+    assert(new_node);
+    m_ast.insert(*new_node);
     return PARSER_RET_CODE::CONTINUE_MOVE;
 }
 
 PARSER_RET_CODE Parser::parse_cell_ioop(const TOKEN_PAIR& token_pair) {
-
+    auto new_node = new BinaryNode(NODE_TYPE::IO, 0, 0);
+    assert(new_node);
+    m_ast.insert(*new_node);
     return PARSER_RET_CODE::CONTINUE_IOOP;
 }
 
@@ -90,6 +97,12 @@ PARSER_RET_CODE Parser::parse_flow_while(Scanner& scanner, const TOKEN_PAIR& tok
     if(expr_token != TOKEN::EXPR_BEGIN) {
         return PARSER_RET_CODE::FAIL_NO_EXPR_BEGIN;
     }
+
+    auto new_node = new ExprNode(NODE_TYPE::WHILE);
+    assert(new_node);
+    m_ast.insert(*new_node);
+    ExprNode* prev_expr = m_ast.getCurrExpr();
+    m_ast.setCurrExpr(*new_node);
 
     while(ret_code != PARSER_RET_CODE::CHECK_EXPR_END) {
         ret_code = parse_token(scanner);
@@ -101,6 +114,8 @@ PARSER_RET_CODE Parser::parse_flow_while(Scanner& scanner, const TOKEN_PAIR& tok
             return ret_code;
         }
     }
+
+    m_ast.setCurrExpr(*prev_expr);
 
     return PARSER_RET_CODE::CONTINUE_WHILE;
 }

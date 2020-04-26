@@ -15,41 +15,51 @@ Ast::~Ast() {
 
 std::string Ast::get_debug_tree() {
     assert(m_root);
-    return get_debug_tree(*m_root, 0);
-}
-
-std::string Ast::get_debug_tree(ExprNode& node, const int level) {
-    auto get_preamble = [] (int level, const std::string& final_part) {
-        std::string preamble;
-        for(int i = 0; i < level - 1; i++) {
-            
-            preamble += "| ";
-        }
-        preamble += final_part;
-        return preamble;
-    };
+    using STACK_OBJ = std::tuple<AstNode*, int, int, bool>;
+    std::stack<STACK_OBJ> debug_stack;
+    debug_stack.push({m_root, 0, 0, true});
 
     std::string debug_string;
-    
-    debug_string += std::to_string((int) node.type()) + "\n";
+    while(!debug_stack.empty()) {
+        auto& tup = debug_stack.top();
+        debug_stack.pop();
+        AstNode* node;
+        int level;
+        int num_pipes;
+        bool node_is_last;
 
-    auto children = node.children();
-    for(int i = 0; i < children.size(); i++) {
-        auto child = children[i];
-        assert(child);
-        std::string final_part = i != children.size() -1 ? "|-" : "`-";
-        std::string child_string = get_preamble(level + 1, final_part);
-        
-        if(child->type() == NODE_TYPE::WHILE) {
-            auto expr_child = static_cast<ExprNode*>(child); 
-            assert(expr_child);
-            child_string += get_debug_tree(*expr_child, level+1);
-        }
-        else {
-            child_string += std::to_string((int) child->type()) + "\n";
+        std::tie(node, level, num_pipes, node_is_last) = tup;
+        assert(node);
+        auto node_type = node->type();
+        bool has_children = node_type == NODE_TYPE::WHILE ||
+                            node_type == NODE_TYPE::PROG_START;
+        if (has_children) {
+            ExprNode* expr = static_cast<ExprNode*>(node);
+            auto children = expr->children();
+            int child_num_pipes = node_is_last ? num_pipes : num_pipes + 1;
+            for(int i = children.size()-1; i >= 0; i--) {
+                auto child = children[i];
+                assert(child);
+                bool child_is_last = i == children.size()-1;
+                debug_stack.push({child, 
+                                  level + 1, 
+                                  child_num_pipes, 
+                                  child_is_last});
+            }
         }
 
-        debug_string += child_string;
+        std::string node_string;
+        for(int j = 0; j < level - num_pipes; j++) {
+            node_string += "  ";
+        }
+        for(int i = 0; i < num_pipes; i++) {
+            node_string += "| ";
+        }
+
+        node_string += node_is_last ? "`-" : "|-";
+        node_string += std::to_string((int)node_type) + "\n";
+        debug_string += node_string;
     }
+
     return debug_string;
 }

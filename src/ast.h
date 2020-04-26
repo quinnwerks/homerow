@@ -7,11 +7,21 @@ class Ast {
     public:
         Ast();
         ~Ast();
+        Ast(Ast& copy_this) {
+            *this = copy_this;
+        }
+        Ast& operator=(Ast& copy_this) {
+            if(this != &copy_this) {
+                m_curr_expr = copy_this.m_curr_expr;
+                m_root = copy_this.m_root;
+            }
+            return *this;
+        }
 
         // Interface to build the initial AST.
         void insert(AstNode& new_node) {m_curr_expr->insertChild(new_node);}
         void setCurrExpr(ExprNode& curr_expr) {m_curr_expr = &curr_expr;}
-        ExprNode& getCurrExpr() {return *m_curr_expr;}
+        ExprNode* getCurrExpr() {return m_curr_expr;}
         
         std::string get_debug_tree();
 
@@ -36,8 +46,6 @@ class Ast {
     private:
         ExprNode* m_root = nullptr;
         ExprNode* m_curr_expr = nullptr;
-        // Useful for debugging
-        std::string get_debug_tree(ExprNode& node, const int level);
 };
 
 #endif
