@@ -35,7 +35,7 @@ class ExprNode : public AstNode {
         void visit() override;
 
         void insertChild(AstNode& child);
-        decltype(auto) children(){ return m_children; }
+        std::vector<AstNode*>& children(){ return m_children; }
     private:
         std::vector<AstNode*> m_children;
 };

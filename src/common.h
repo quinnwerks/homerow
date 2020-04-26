@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <stack>
+#include <iostream>
 
 namespace LANG {
     enum TOKEN {
@@ -43,7 +44,8 @@ namespace TYPE_ENUM {
         PROG_START,
         OPER_MOVE,
         OPER_MUTE,
-        IO
+        IO,
+        WHILE
     };
 }
 using NODE_TYPE = TYPE_ENUM::NODE_TYPE;
