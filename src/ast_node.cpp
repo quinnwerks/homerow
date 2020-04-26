@@ -1,10 +1,5 @@
 #include "ast_node.h"
 
-/*
-ExprNode::~ExprNode() {
-    delete_children();
-}*/
-
 void ExprNode::delete_children() {
     auto& children = m_children;
     auto child_begin = children.begin();
