@@ -1,6 +1,11 @@
 #include "ast_node.h"
 
+/*
 ExprNode::~ExprNode() {
+    delete_children();
+}*/
+
+void ExprNode::delete_children() {
     auto& children = m_children;
     auto child_begin = children.begin();
     auto chlid_end   = children.end();
@@ -21,6 +26,9 @@ void ExprNode::visit() {
     });
 }
 
-bool ExprNode::insertChild(AstNode& child) {
+void ExprNode::insertChild(AstNode& child) {
     m_children.emplace_back(&child);
+}
+
+void BinaryNode::visit() {
 }

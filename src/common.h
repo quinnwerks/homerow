@@ -35,10 +35,14 @@ using TOKEN_PAIR = std::pair<LANG::TOKEN,
 
 namespace TYPE_ENUM {
     enum class NODE_TYPE {
+        // Generic types used in testing
+        INTERNAL_NODE,
+        LEAF_NODE,
+        // Types used in production
         PROG_START,
-        BODY,
         OPER_MOVE,
-        OPER_MUTE
+        OPER_MUTE,
+        IO
     };
 }
 using NODE_TYPE = TYPE_ENUM::NODE_TYPE;
