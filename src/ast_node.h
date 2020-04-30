@@ -11,13 +11,12 @@ class AstNode {
     public:
         AstNode(const NODE_TYPE type) 
         : m_type(type) {}
-        virtual ~AstNode() {}
+        AstNode(const AstNode& copy_this) {this->m_type = copy_this.m_type;};
+        virtual ~AstNode() = 0;
         bool operator==(const AstNode& rhs) { return (*this).m_type 
                                               == rhs.m_type; }
 
         NODE_TYPE type() {return m_type;}
-
-        virtual void visit() = 0;
 
     private:
         NODE_TYPE m_type;
@@ -28,11 +27,11 @@ class AstNode {
 class ExprNode : public AstNode {
     public:
         ExprNode(const NODE_TYPE type) 
-        : AstNode(type) {}       
+        : AstNode(type) {}
+        ExprNode(const ExprNode& copy_this);
+        ExprNode operator=(const ExprNode& copy_this);      
         virtual ~ExprNode() {delete_children();};
         void delete_children();
-
-        void visit() override;
 
         void insertChild(AstNode& child);
         std::vector<AstNode*>& children(){ return m_children; }
@@ -44,8 +43,9 @@ class BinaryNode : public AstNode {
     public:
         BinaryNode(const NODE_TYPE type, int reg, int val) 
         : AstNode(type), m_reg(reg), m_val(val) {}
+        BinaryNode(const BinaryNode& copy_this);
+        BinaryNode operator=(const BinaryNode& copy_this);       
         virtual ~BinaryNode() {}
-        void visit() override;
 
         int reg() {return m_reg;}
         int val() {return m_val;}
