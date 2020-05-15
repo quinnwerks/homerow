@@ -2,13 +2,21 @@
 
 
 /// @brief Boiler plate
-Parser::Parser() {}
-Parser::Parser(Parser& copy_this) {
+Parser::Parser() {
+    // Start at cell zero
+    m_parser_state.curr_cell = 0;
+}
+
+Parser::Parser(const Parser& copy_this) {
     *this = copy_this;
 }
-Parser& Parser::operator=(Parser& copy_this) {
+Parser Parser::operator=(const Parser& copy_this) {
     if(this != &copy_this) {}
     return *this;    
+}
+
+ParserState Parser::getState() {
+    return m_parser_state;
 }
 
 PARSER_RET_CODE Parser::parse(Scanner& scanner) {
@@ -66,8 +74,12 @@ PARSER_RET_CODE Parser::parse_token(Scanner& scanner) {
 /// @brief Create an increment or decrement node
 PARSER_RET_CODE Parser::parse_cell_mute(const TOKEN_PAIR& token_pair) {
     auto token = token_pair.first;
+    int curr_cell = m_parser_state.curr_cell;
     int value = token == TOKEN::UP ? 1 : -1;
-    auto new_node = new BinaryNode(NODE_TYPE::OPER_MUTE, 0, 0);
+
+    auto new_node = new BinaryNode(NODE_TYPE::OPER_MUTE, 
+                                   curr_cell, 
+                                   value);
     assert(new_node);
     m_ast.insert(*new_node);
     return PARSER_RET_CODE::CONTINUE_MUTE;
@@ -78,14 +90,21 @@ PARSER_RET_CODE Parser::parse_cell_mute(const TOKEN_PAIR& token_pair) {
 PARSER_RET_CODE Parser::parse_cell_move(const TOKEN_PAIR& token_pair) {
     auto token = token_pair.first;
     int value = token == TOKEN::RIGHT ? 1 : -1;
-    auto new_node = new BinaryNode(NODE_TYPE::OPER_MOVE, 0, 0);
+
+    m_parser_state.curr_cell = m_parser_state.curr_cell + value;
+    int curr_cell = m_parser_state.curr_cell;
+
+    auto new_node = new BinaryNode(NODE_TYPE::OPER_MOVE, 
+                                   curr_cell, 
+                                   value);
     assert(new_node);
     m_ast.insert(*new_node);
     return PARSER_RET_CODE::CONTINUE_MOVE;
 }
 
 PARSER_RET_CODE Parser::parse_cell_ioop(const TOKEN_PAIR& token_pair) {
-    auto new_node = new BinaryNode(NODE_TYPE::IO, 0, 0);
+    int curr_cell = m_parser_state.curr_cell;
+    auto new_node = new BinaryNode(NODE_TYPE::IO, curr_cell, 0);
     assert(new_node);
     m_ast.insert(*new_node);
     return PARSER_RET_CODE::CONTINUE_IOOP;

@@ -20,14 +20,18 @@ enum class PARSER_RET_CODE {
 
 struct ParserState {
     int curr_cell;
+    ParserState() : curr_cell(0) {}
+    ParserState(int cell) : curr_cell(cell) {}
 };
 
 class Parser {
     public:
 
         Parser();
-        Parser(Parser& copy_this);
-        Parser& operator=(Parser & copy_this);
+        Parser(const Parser& copy_this);
+        Parser operator=(const Parser & copy_this);
+
+        ParserState getState();
 
         PARSER_RET_CODE parse(Scanner& scanner);
         PARSER_RET_CODE parse_token(Scanner& scanner);
