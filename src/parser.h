@@ -18,6 +18,10 @@ enum class PARSER_RET_CODE {
     ACCEPT
 };
 
+struct ParserState {
+    int curr_cell;
+};
+
 class Parser {
     public:
 
@@ -39,6 +43,7 @@ class Parser {
         PARSER_RET_CODE validExpr(TOKEN_PAIR word);
         std::string dumpRepresentation();
 
-        Ast m_ast;   
+        Ast m_ast;
+        ParserState m_parser_state;   
 };
 #endif

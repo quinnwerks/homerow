@@ -12,7 +12,7 @@ class AstNode {
         AstNode(const NODE_TYPE type) 
         : m_type(type) {}
         AstNode(const AstNode& copy_this) {this->m_type = copy_this.m_type;};
-        virtual ~AstNode() = 0;
+        virtual ~AstNode() {}
         bool operator==(const AstNode& rhs) { return (*this).m_type 
                                               == rhs.m_type; }
 
