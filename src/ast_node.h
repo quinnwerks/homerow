@@ -9,15 +9,14 @@
 ///        All node types are derived from this class. 
 class AstNode {
     public:
-        AstNode(const NODE_TYPE type) 
-        : m_type(type) {}
+        AstNode(const NODE_TYPE type) : m_type(type) {}
         AstNode(const AstNode& copy_this) {this->m_type = copy_this.m_type;};
         virtual ~AstNode() {}
-        bool operator==(const AstNode& rhs) { return (*this).m_type 
-                                              == rhs.m_type; }
-
+        virtual std::string getDebugString() { 
+            return "TYPE: " + std::to_string((int)this->m_type);
+        }
+        
         NODE_TYPE type() {return m_type;}
-
     private:
         NODE_TYPE m_type;
 };
@@ -26,13 +25,13 @@ class AstNode {
 ///        They can have an arbitrary number of children.
 class ExprNode : public AstNode {
     public:
-        ExprNode(const NODE_TYPE type) 
-        : AstNode(type) {}
+        ExprNode(const NODE_TYPE type) : AstNode(type) {}
         ExprNode(const ExprNode& copy_this);
         ExprNode operator=(const ExprNode& copy_this);      
         virtual ~ExprNode() {delete_children();};
-        void delete_children();
+        std::string getDebugString() override;
 
+        void delete_children();
         void insertChild(AstNode& child);
         std::vector<AstNode*>& children(){ return m_children; }
     private:
@@ -41,11 +40,11 @@ class ExprNode : public AstNode {
 
 class BinaryNode : public AstNode {
     public:
-        BinaryNode(const NODE_TYPE type, int reg, int val) 
-        : AstNode(type), m_reg(reg), m_val(val) {}
+        BinaryNode(const NODE_TYPE type, int reg, int val) : AstNode(type), m_reg(reg), m_val(val) {}
         BinaryNode(const BinaryNode& copy_this);
         BinaryNode operator=(const BinaryNode& copy_this);       
         virtual ~BinaryNode() {}
+        std::string getDebugString() override;
 
         int reg() {return m_reg;}
         int val() {return m_val;}

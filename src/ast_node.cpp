@@ -4,6 +4,10 @@ ExprNode::ExprNode(const ExprNode& copy_this) : AstNode(copy_this) {
     *this = copy_this;
 }
 
+std::string ExprNode::getDebugString() {
+    return "";
+}
+
 ExprNode ExprNode::operator=(const ExprNode& copy_this) {
     if(this != &copy_this) {
         this->m_children = copy_this.m_children;
@@ -28,6 +32,10 @@ void ExprNode::insertChild(AstNode& child) {
 
 BinaryNode::BinaryNode(const BinaryNode& copy_this) : AstNode(copy_this) {
     *this = copy_this;
+}
+
+std::string BinaryNode::getDebugString() {
+    return "";
 }
 
 BinaryNode BinaryNode::operator=(const BinaryNode& copy_this) {
