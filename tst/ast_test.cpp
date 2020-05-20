@@ -4,6 +4,9 @@
 TEST(AST_SHOULD, basic_ast_one_node) {
     Ast test_ast;
     std::cout << test_ast.get_debug_tree();
+
+    std::string golden_tree("TYPE:2\n");
+    ASSERT_EQ(golden_tree, test_ast.get_debug_tree());
 }
 
 TEST(AST_SHOULD, basic_ast_node_with_children) {
@@ -16,7 +19,10 @@ TEST(AST_SHOULD, basic_ast_node_with_children) {
     test_ast.insert(*child_1);
     test_ast.insert(*child_2);
 
-    std::cout << test_ast.get_debug_tree();
+    std::string golden_tree("TYPE:2\n"
+                            "  |-TYPE:4-REG:1-VAL:2\n"
+                            "  `-TYPE:5-REG:3-VAL:4\n");
+    ASSERT_EQ(golden_tree, test_ast.get_debug_tree());
 }
 
 TEST(AST_SHOULD, basic_ast_with_grandchildren) {
@@ -39,5 +45,11 @@ TEST(AST_SHOULD, basic_ast_with_grandchildren) {
     test_ast.insert(*grandchild_1);
     test_ast.insert(*grandchild_2);
 
-    std::cout << test_ast.get_debug_tree();
+    std::string golden_tree("TYPE:2\n"
+                            "  |-TYPE:4-REG:1-VAL:2\n"
+                            "  |-TYPE:6\n"
+                            "  | |-TYPE:3-REG:5-VAL:6\n"
+                            "  | `-TYPE:4-REG:5-VAL:6\n"
+                            "  `-TYPE:5-REG:1-VAL:2\n");
+    ASSERT_EQ(golden_tree, test_ast.get_debug_tree());
 }
