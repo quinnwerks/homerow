@@ -15,9 +15,9 @@ Ast::~Ast() {
 
 std::string Ast::get_debug_tree() {
     assert(m_root);
-    using STACK_OBJ = std::tuple<AstNode*, int, int, bool>;
+    using STACK_OBJ = std::tuple<AstNode*, int, int, bool, bool>;
     std::stack<STACK_OBJ> debug_stack;
-    debug_stack.push({m_root, 0, 0, true});
+    debug_stack.push({m_root, 0, 0, true, true});
 
     std::string debug_string;
     while(!debug_stack.empty()) {
@@ -27,8 +27,9 @@ std::string Ast::get_debug_tree() {
         int level;
         int num_pipes;
         bool node_is_last;
+        bool is_root;
 
-        std::tie(node, level, num_pipes, node_is_last) = tup;
+        std::tie(node, level, num_pipes, node_is_last, is_root) = tup;
         assert(node);
         auto node_type = node->type();
         bool has_children = node_type == NODE_TYPE::WHILE ||
@@ -44,7 +45,8 @@ std::string Ast::get_debug_tree() {
                 debug_stack.push({child, 
                                   level + 1, 
                                   child_num_pipes, 
-                                  child_is_last});
+                                  child_is_last,
+                                  false});
             }
         }
 
@@ -56,8 +58,8 @@ std::string Ast::get_debug_tree() {
             node_string += "| ";
         }
 
-        node_string += node_is_last ? "`-" : "|-";
-        node_string += std::to_string((int)node_type) + "\n";
+        node_string += is_root ?  "" : (node_is_last ? "`-" : "|-");
+        node_string += node->getDebugString() + "\n";
         debug_string += node_string;
     }
 

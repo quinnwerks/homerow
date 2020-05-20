@@ -13,7 +13,7 @@ class AstNode {
         AstNode(const AstNode& copy_this) {this->m_type = copy_this.m_type;};
         virtual ~AstNode() {}
         virtual std::string getDebugString() { 
-            return "TYPE: " + std::to_string((int)this->m_type);
+            return "TYPE:" + std::to_string((int)this->m_type);
         }
         
         NODE_TYPE type() {return m_type;}

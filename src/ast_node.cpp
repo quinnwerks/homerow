@@ -5,7 +5,8 @@ ExprNode::ExprNode(const ExprNode& copy_this) : AstNode(copy_this) {
 }
 
 std::string ExprNode::getDebugString() {
-    return "";
+    std::string debug_string = AstNode::getDebugString();
+    return debug_string;
 }
 
 ExprNode ExprNode::operator=(const ExprNode& copy_this) {
@@ -35,7 +36,10 @@ BinaryNode::BinaryNode(const BinaryNode& copy_this) : AstNode(copy_this) {
 }
 
 std::string BinaryNode::getDebugString() {
-    return "";
+    std::string debug_string = AstNode::getDebugString() 
+                             + "-REG:" + std::to_string(m_reg)
+                             + "-VAL:"  + std::to_string(m_val);
+    return debug_string;
 }
 
 BinaryNode BinaryNode::operator=(const BinaryNode& copy_this) {
