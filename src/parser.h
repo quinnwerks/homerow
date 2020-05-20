@@ -36,7 +36,7 @@ class Parser {
         PARSER_RET_CODE parse(Scanner& scanner);
         PARSER_RET_CODE parse_token(Scanner& scanner);
 
-        Ast& ast() {return m_ast;}
+        Ast& getAst() {return m_ast;}
        
     private:
         PARSER_RET_CODE parse_cell_mute(const TOKEN_PAIR& token_pair);

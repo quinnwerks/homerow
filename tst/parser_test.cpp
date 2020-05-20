@@ -122,3 +122,25 @@ TEST(PARSER_SHOULD, mutate_parser_state_left_displacement) {
     ParserState test_state(-6);
     test_parser_state({"hlhlhhhhhh", test_state});
 }
+
+using TEST_CASE_PARSER_AST = std::tuple<std::string, std::string> ;
+void test_parser_state(TEST_CASE_PARSER_AST test_case) {
+    std::string input_text;
+    std::string golden_tree;
+    std::tie(input_text, golden_tree) = test_case;
+    TEST_CASE_EXPR parse_target = {input_text, PARSER_RET_CODE::ACCEPT};
+    Parser test_parser = run_parsing_test_case_full(parse_target);
+    std::string result_tree = (test_parser.getAst()).get_debug_tree();
+    std::cout << result_tree;
+    EXPECT_EQ(golden_tree, result_tree);
+}
+
+TEST(PARSER_SHOULD, apply_diff_ops_same_cell) {
+    std::string golden_tree("");
+    test_parser_state({"hjkl", golden_tree});
+}
+
+TEST(PARSER_SHOULD, apply_same_ops_diff_cell) {
+    std::string golden_tree("");
+    test_parser_state({"hjllj", golden_tree});
+}
