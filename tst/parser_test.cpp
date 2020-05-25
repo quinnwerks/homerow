@@ -135,27 +135,27 @@ void test_parser_state(TEST_CASE_PARSER_AST test_case) {
 }
 
 TEST(PARSER_SHOULD, apply_diff_ops_same_cell) {
-    std::string golden_tree("TYPE:2\n"
-                            "  |-TYPE:4-REG:0-VAL:-1\n"
-                            "  `-TYPE:4-REG:0-VAL:1\n");
+    std::string golden_tree("TYPE:0\n"
+                            "  |-TYPE:3-REG:0-VAL:-1\n"
+                            "  `-TYPE:3-REG:0-VAL:1\n");
     test_parser_state({"jk", golden_tree});
 }
 
 TEST(PARSER_SHOULD, apply_same_ops_diff_cell) {
-    std::string golden_tree("TYPE:2\n"
-                            "  |-TYPE:3-REG:-1-VAL:-1\n"
-                            "  |-TYPE:3-REG:0-VAL:1\n"
-                            "  `-TYPE:3-REG:1-VAL:1\n");
+    std::string golden_tree("TYPE:0\n"
+                            "  |-TYPE:2-REG:-1-VAL:-1\n"
+                            "  |-TYPE:2-REG:0-VAL:1\n"
+                            "  `-TYPE:2-REG:1-VAL:1\n");
     test_parser_state({"hll", golden_tree});
 }
 
 TEST(PARSER_SHOULD, set_curr_node_properly) {
-    std::string golden_tree("TYPE:2\n"
-                            "  |-TYPE:6\n"
-                            "  | |-TYPE:4-REG:0-VAL:-1\n"
-                            "  | |-TYPE:6\n"
-                            "  | | `-TYPE:4-REG:0-VAL:1\n"
-                            "  | `-TYPE:3-REG:1-VAL:1\n"
-                            "  `-TYPE:3-REG:0-VAL:-1\n");
+    std::string golden_tree("TYPE:0\n"
+                            "  |-TYPE:1\n"
+                            "  | |-TYPE:3-REG:0-VAL:-1\n"
+                            "  | |-TYPE:1\n"
+                            "  | | `-TYPE:3-REG:0-VAL:1\n"
+                            "  | `-TYPE:2-REG:1-VAL:1\n"
+                            "  `-TYPE:2-REG:0-VAL:-1\n");
     test_parser_state({"F: j F: k; l; h", golden_tree});
 }

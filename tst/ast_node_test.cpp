@@ -13,10 +13,10 @@ TEST(AST_NODE_SHOULD, node_no_children) {
 TEST(AST_NODE_SHOULD, node_with_leaf) {
     // test_node
     // `- test_leaf
-    ExprNode* test_node = new ExprNode(NODE_TYPE::INTERNAL_NODE);
+    ExprNode* test_node = new ExprNode(NODE_TYPE::WHILE);
     ASSERT_TRUE(test_node);
 
-    ExprNode* test_leaf = new ExprNode(NODE_TYPE::LEAF_NODE);
+    ExprNode* test_leaf = new ExprNode(NODE_TYPE::IO);
     ASSERT_TRUE(test_leaf);
 
     test_node->insertChild(*test_leaf);
@@ -31,13 +31,13 @@ TEST(AST_NODE_SHOULD, test_node_with_grandchildren) {
     // test_node
     // `- test_child
     //    `- test_grandchild
-    ExprNode* test_node       = new ExprNode(NODE_TYPE::INTERNAL_NODE);
+    ExprNode* test_node       = new ExprNode(NODE_TYPE::WHILE);
     ASSERT_TRUE(test_node);
 
-    ExprNode* test_child      = new ExprNode(NODE_TYPE::INTERNAL_NODE);
+    ExprNode* test_child      = new ExprNode(NODE_TYPE::WHILE);
     ASSERT_TRUE(test_child); 
 
-    ExprNode* test_grandchild = new ExprNode(NODE_TYPE::LEAF_NODE);
+    ExprNode* test_grandchild = new ExprNode(NODE_TYPE::IO);
     ASSERT_TRUE(test_grandchild); 
 
     test_node->insertChild(*test_child);

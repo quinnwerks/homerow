@@ -13,10 +13,6 @@ Ast::~Ast() {
     }
 }
 
-ExprNode* Ast::getRoot() const {
-    return m_root;
-}
-
 std::string Ast::get_debug_tree() {
     assert(m_root);
     using STACK_OBJ = std::tuple<AstNode*, int, int, bool, bool>;
