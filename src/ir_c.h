@@ -1,5 +1,8 @@
 #ifndef IR_C_H
 #define IR_C_H
+#include "common.h"
+#include "ast_node.h"
+#include "ast.h"
 
 class IrToC {
     public:
