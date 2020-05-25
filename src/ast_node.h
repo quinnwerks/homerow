@@ -12,11 +12,11 @@ class AstNode {
         AstNode(const NODE_TYPE type) : m_type(type) {}
         AstNode(const AstNode& copy_this) {this->m_type = copy_this.m_type;};
         virtual ~AstNode() {}
-        virtual std::string getDebugString() { 
+        virtual std::string getDebugString() const { 
             return "TYPE:" + std::to_string((int)this->m_type);
         }
         
-        NODE_TYPE type() {return m_type;}
+        NODE_TYPE type() const {return m_type;}
     private:
         NODE_TYPE m_type;
 };
@@ -29,7 +29,7 @@ class ExprNode : public AstNode {
         ExprNode(const ExprNode& copy_this);
         ExprNode operator=(const ExprNode& copy_this);      
         virtual ~ExprNode() {delete_children();};
-        std::string getDebugString() override;
+        std::string getDebugString() const override;
 
         void delete_children();
         void insertChild(AstNode& child);
@@ -44,7 +44,7 @@ class BinaryNode : public AstNode {
         BinaryNode(const BinaryNode& copy_this);
         BinaryNode operator=(const BinaryNode& copy_this);       
         virtual ~BinaryNode() {}
-        std::string getDebugString() override;
+        std::string getDebugString() const override;
 
         int reg() {return m_reg;}
         int val() {return m_val;}
@@ -52,6 +52,15 @@ class BinaryNode : public AstNode {
         int m_reg;
         int m_val;
 };
+
+namespace AST_NODE_OP {
+    template <class N>
+    N& cast(const AstNode& node) {
+        N* p_new_node = static_cast<N*>(&node);
+        assert(p_new_node);
+        return *p_new_node;
+    }
+}
 
 
 #endif

@@ -4,7 +4,7 @@ ExprNode::ExprNode(const ExprNode& copy_this) : AstNode(copy_this) {
     *this = copy_this;
 }
 
-std::string ExprNode::getDebugString() {
+std::string ExprNode::getDebugString() const {
     std::string debug_string = AstNode::getDebugString();
     return debug_string;
 }
@@ -35,7 +35,7 @@ BinaryNode::BinaryNode(const BinaryNode& copy_this) : AstNode(copy_this) {
     *this = copy_this;
 }
 
-std::string BinaryNode::getDebugString() {
+std::string BinaryNode::getDebugString() const {
     std::string debug_string = AstNode::getDebugString() 
                              + "-REG:" + std::to_string(m_reg)
                              + "-VAL:"  + std::to_string(m_val);

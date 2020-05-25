@@ -21,7 +21,8 @@ class Ast {
         // Interface to build the initial AST.
         void insert(AstNode& new_node) {m_curr_expr->insertChild(new_node);}
         void setCurrExpr(ExprNode& curr_expr) {m_curr_expr = &curr_expr;}
-        ExprNode* getCurrExpr() {return m_curr_expr;}
+        ExprNode* getCurrExpr() const {return m_curr_expr;}
+        ExprNode* getRoot() const {return m_root;}
         
         std::string get_debug_tree();
 
