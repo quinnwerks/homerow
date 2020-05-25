@@ -56,6 +56,9 @@ class BinaryNode : public AstNode {
 namespace AST_NODE_OP {
     template <class N>
     N& cast(const AstNode& node) {
+        static_assert(std::is_same<N, ExprNode>() 
+                   || std::is_same<N, BinaryNode>(), 
+                   "Not a supported ast node type");
         N* p_new_node = static_cast<N*>(&node);
         assert(p_new_node);
         return *p_new_node;
