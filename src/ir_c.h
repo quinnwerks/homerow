@@ -10,7 +10,7 @@ class IrToC {
     private:
         std::string getOutput(const AstNode& node);
         std::string getNodeString(const AstNode& node);
-        std::pair<std::string, std::string> getExprString(const ExprNode& node);
+        std::string getExprStringPair(const ExprNode& node);
         std::string getBinaryString(const BinaryNode& node);
 };
 
